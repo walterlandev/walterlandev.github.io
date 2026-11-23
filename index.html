@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Walterlan Alves dos Santos | Desenvolvedor Full-Stack</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Portfólio e currículo de Walterlan Alves dos Santos, desenvolvedor full-stack. Sistemas para associações, saneamento, segurança pública e construção civil, com demonstrações interativas.">
+  <meta name="theme-color" content="#eef0ea">
+  <script>try{var t=localStorage.getItem("tema");if(t==="escuro"||t==="claro")document.documentElement.setAttribute("data-tema",t);}catch(e){}</script>
+  <link rel="stylesheet" href="assets/css/base.css">
+  <link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body data-pagina="inicio">
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="topo">
+    <div class="contido topo__linha">
+      <a class="topo__nome" href="#inicio" data-perfil-nome>Walterlan Alves dos Santos</a>
+      <nav class="topo__nav" aria-label="Seções">
+        <a href="#projetos">Projetos</a>
+        <a href="#curriculo">Currículo</a>
+        <a href="#contato">Contato</a>
+      </nav>
+      <button class="btn topo__tema" type="button" data-tema-botao><span class="sr-only">Mudar tema</span></button>
+    </div>
+  </header>
+
+  <main id="conteudo">
+    <section class="abertura" id="inicio" aria-labelledby="titulo-abertura">
+      <div class="contido abertura__grade">
+        <div class="abertura__texto">
+          <h1 id="titulo-abertura" data-perfil-nome>Walterlan Alves dos Santos</h1>
+          <p class="abertura__titulo" data-perfil-titulo>Desenvolvedor Full-Stack</p>
+          <p class="abertura__resumo" data-perfil-resumo></p>
+          <div class="acoes">
+            <a class="btn btn--sinal" href="#projetos">Ver projetos</a>
+            <a class="btn" href="#curriculo">Currículo</a>
+          </div>
+        </div>
+        <aside class="painel painel-op" data-painel-operacoes aria-label="Números do portfólio"></aside>
+      </div>
+    </section>
+
+    <section class="secao" id="projetos" aria-labelledby="titulo-projetos">
+      <div class="contido">
+        <div class="secao__cabeca">
+          <h2 id="titulo-projetos">Projetos</h2>
+          <p>Sistemas em uso por equipes reais. Os nomes de clientes e órgãos ficam de fora; as demonstrações usam dados fictícios.</p>
+        </div>
+        <div class="projetos-d" data-projetos-destaque></div>
+        <div class="projetos-c" data-bloco-outros>
+          <h3 class="projetos-c__titulo">Outros projetos</h3>
+          <ul class="projetos-c__lista" data-projetos-outros></ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="secao curriculo" id="curriculo" aria-labelledby="titulo-curriculo">
+      <div class="contido">
+        <div class="secao__cabeca secao__cabeca--acao">
+          <h2 id="titulo-curriculo">Currículo</h2>
+          <button class="btn" type="button" data-imprimir>Imprimir / salvar PDF</button>
+        </div>
+        <div class="painel cv" data-curriculo></div>
+      </div>
+    </section>
+
+    <section class="secao contato" id="contato" aria-labelledby="titulo-contato">
+      <div class="contido">
+        <div class="secao__cabeca">
+          <h2 id="titulo-contato">Contato</h2>
+          <p>Escolha o canal que preferir.</p>
+        </div>
+        <ul class="canais" data-contato></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape">
+    <div class="contido rodape__linha">
+      <p><span data-perfil-nome>Walterlan Alves dos Santos</span>, <span data-ano>2026</span>.</p>
+      <p>Feito em HTML, CSS e JavaScript, sem framework.</p>
+    </div>
+  </footer>
+
+  <script src="assets/js/perfil.js"></script>
+  <script src="assets/js/projetos.js"></script>
+  <script src="assets/js/site.js"></script>
+</body>
+</html>

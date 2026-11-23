@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vistoria de viaturas | Demonstração</title>
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Demonstração interativa de um app de vistoria diária de viaturas que funciona sem internet, com painel do chefe de garagem.">
+  <meta name="color-scheme" content="light dark">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body data-aba="app">
+  <div class="faixa-demo" role="note">
+    <span>Demonstração com dados fictícios. Nada é gravado.</span>
+    <a href="../../projeto.html?id=vistoria">Voltar ao portfólio</a>
+  </div>
+
+  <header class="topo contido">
+    <div>
+      <h1>Vistoria diária de viaturas</h1>
+      <p>Faça a vistoria no celular. Quando você envia, o painel do chefe de garagem recebe na hora. Sem internet, a vistoria espera na fila do aparelho e segue quando a conexão volta.</p>
+    </div>
+    <button type="button" class="btn" id="btn-tema"></button>
+  </header>
+
+  <main class="palco contido">
+    <section class="coluna-app" aria-label="App do motorista">
+      <div class="celular">
+        <div class="celular__tela">
+          <div class="app" id="app">
+            <div class="app__status">
+              <span class="conexao" id="conexao"></span>
+              <button type="button" class="rede" id="btn-rede"></button>
+            </div>
+            <p class="app__offline" id="faixa-offline" hidden></p>
+            <div class="app__cabeca" id="app-cabeca"></div>
+            <div class="app__corpo" id="app-corpo"></div>
+            <div class="app__acoes" id="app-acoes" hidden></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="canal" id="canal" aria-hidden="true">
+      <div class="canal__linha"></div>
+      <div class="canal__fila" id="canal-fila"></div>
+      <p class="canal__rotulo" id="canal-rotulo"></p>
+    </div>
+
+    <section class="coluna-painel" aria-labelledby="painel-titulo">
+      <div class="painel" id="painel"></div>
+    </section>
+  </main>
+
+  <nav class="abas" aria-label="Alternar entre o app e o painel">
+    <button type="button" class="aba" data-aba="app" aria-pressed="true">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="7" y="2.5" width="10" height="19" rx="2"/><path d="M11 18h2"/></svg>
+      Vistoria
+    </button>
+    <button type="button" class="aba" data-aba="painel" aria-pressed="false">
+      <svg class="ic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18M9 9v11"/></svg>
+      Painel do chefe
+      <span class="aba__contagem" id="aba-contagem" hidden></span>
+    </button>
+  </nav>
+
+  <div class="sr-only" aria-live="polite" id="aviso"></div>
+  <script src="app.js"></script>
+</body>
+</html>

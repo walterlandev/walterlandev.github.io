@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Controle de ETAs</title>
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Demonstração com dados fictícios de um sistema de controle operacional de estações de tratamento de água: leituras, alertas, estoque de produtos químicos e boletim diário.">
+  <script>
+    try { var t = localStorage.getItem("tema"); if (t === "claro" || t === "escuro") document.documentElement.setAttribute("data-tema", t); } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="faixa-demo" role="note">
+    <span>Demonstração com dados fictícios. Nada é gravado.</span>
+    <a href="../../projeto.html?id=saneamento">Voltar ao portfólio</a>
+  </div>
+
+  <header class="topo">
+    <div class="contido topo__linha">
+      <div class="marca">
+        <svg class="marca__icone" viewBox="0 0 32 32" aria-hidden="true">
+          <path d="M16 3c-4.5 6-8 10.4-8 15a8 8 0 0 0 16 0c0-4.6-3.5-9-8-15Z" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+          <path d="M11.5 19.5c.4 2.3 2 3.8 4.5 4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <p class="marca__nome">Controle de ETAs</p>
+          <p class="marca__sub">Regional Demonstração<span class="marca__data">, <span id="data-hoje"></span></span></p>
+        </div>
+      </div>
+      <nav class="atalhos" aria-label="Seções">
+        <a href="#visao">Visão geral</a>
+        <a href="#lancamento">Lançamento</a>
+        <a href="#estoque">Estoque</a>
+        <a href="#boletim-secao">Boletim</a>
+      </nav>
+      <button type="button" class="btn btn-tema" id="btn-tema" aria-label="Alternar tema claro e escuro">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <span id="btn-tema-texto">Tema escuro</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="conteudo" class="contido">
+    <div class="grade-principal">
+      <section id="visao" class="visao" aria-labelledby="t-visao">
+        <div class="visao__cabeca">
+          <h1 id="t-visao">Visão geral</h1>
+          <p class="visao__hora">Última atualização às <b id="hora-atualizacao">--:--</b></p>
+        </div>
+
+        <div class="indicadores" id="indicadores" aria-live="polite"></div>
+
+        <div class="painel painel--estacoes">
+          <div class="painel__cabeca">
+            <h2 class="painel__titulo">Estações</h2>
+            <span class="legenda-situacao">
+              <span class="estado estado--ok">Normal</span>
+              <span class="estado estado--sinal">Atenção</span>
+              <span class="estado estado--alerta">Fora da faixa</span>
+            </span>
+          </div>
+          <p class="ajuda">Escolha uma estação para ver as leituras no gráfico.</p>
+          <ul class="estacoes" id="lista-estacoes"></ul>
+        </div>
+
+        <div class="painel painel--grafico">
+          <div class="painel__cabeca">
+            <h2 class="painel__titulo" id="t-grafico">Últimas 24 leituras</h2>
+            <span class="grafico__legenda" aria-hidden="true"><i class="faixa-amostra"></i> faixa aceitável</span>
+          </div>
+          <div class="grafico" id="grafico">
+            <svg id="grafico-svg" role="img" aria-labelledby="t-grafico grafico-desc" focusable="false"></svg>
+            <p id="grafico-desc" class="sr-only"></p>
+            <div class="grafico__dica" id="grafico-dica" hidden></div>
+          </div>
+          <p class="ajuda ajuda--grafico">Passe o mouse ou toque no gráfico para ver cada leitura. Pelo teclado, foque o gráfico e use as setas.</p>
+          <details class="tabela-alternativa">
+            <summary>Ver as leituras em tabela</summary>
+            <div class="rolagem-tabela">
+              <table class="tabela" id="tabela-leituras">
+                <caption class="sr-only">Leituras da estação selecionada</caption>
+                <thead><tr><th scope="col">Hora</th><th scope="col" class="num">Cloro (mg/L)</th><th scope="col" class="num">Turbidez (NTU)</th><th scope="col" class="num">pH</th><th scope="col" class="num">Vazão (L/s)</th></tr></thead>
+                <tbody></tbody>
+              </table>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <section id="lancamento" class="lancamento" aria-labelledby="t-lanc">
+        <div class="celular">
+          <div class="celular__barra" aria-hidden="true"><span id="celular-hora">--:--</span><span class="celular__sinal"><i></i><i></i><i></i><i></i></span></div>
+          <div class="celular__tela">
+            <h2 id="t-lanc" class="celular__titulo">Nova leitura</h2>
+            <p class="ajuda">Tela do operador na estação. A validação acontece enquanto você digita.</p>
+            <form id="form-leitura" novalidate>
+              <div class="campo">
+                <label for="f-estacao">Estação</label>
+                <select id="f-estacao" name="estacao"></select>
+              </div>
+              <div class="campo">
+                <label for="f-hora">Hora da coleta</label>
+                <input id="f-hora" name="hora" type="time" required>
+                <p class="campo__msg" id="m-hora" aria-live="polite"></p>
+              </div>
+              <div class="campos-duplos">
+                <div class="campo" data-param="cloro">
+                  <label for="f-cloro">Cloro residual <span class="unid">mg/L</span></label>
+                  <input id="f-cloro" name="cloro" type="text" inputmode="decimal" autocomplete="off" required aria-describedby="m-cloro" placeholder="0,2 a 2,0">
+                  <p class="campo__msg" id="m-cloro" aria-live="polite"></p>
+                </div>
+                <div class="campo" data-param="turbidez">
+                  <label for="f-turbidez">Turbidez <span class="unid">NTU</span></label>
+                  <input id="f-turbidez" name="turbidez" type="text" inputmode="decimal" autocomplete="off" required aria-describedby="m-turbidez" placeholder="até 5,0">
+                  <p class="campo__msg" id="m-turbidez" aria-live="polite"></p>
+                </div>
+                <div class="campo" data-param="ph">
+                  <label for="f-ph">pH</label>
+                  <input id="f-ph" name="ph" type="text" inputmode="decimal" autocomplete="off" required aria-describedby="m-ph" placeholder="6,0 a 9,5">
+                  <p class="campo__msg" id="m-ph" aria-live="polite"></p>
+                </div>
+                <div class="campo" data-param="vazao">
+                  <label for="f-vazao">Vazão <span class="unid">L/s</span></label>
+                  <input id="f-vazao" name="vazao" type="text" inputmode="decimal" autocomplete="off" required aria-describedby="m-vazao" placeholder="ex.: 42">
+                  <p class="campo__msg" id="m-vazao" aria-live="polite"></p>
+                </div>
+              </div>
+              <button type="submit" class="btn btn--sinal btn--largo" id="btn-salvar">Salvar leitura</button>
+              <p class="retorno" id="retorno-leitura" role="status"></p>
+            </form>
+            <div class="exemplos">
+              <span>Preencher exemplo:</span>
+              <button type="button" class="btn btn--texto" data-exemplo="ok">dentro da faixa</button>
+              <button type="button" class="btn btn--texto" data-exemplo="fora">fora da faixa</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section id="estoque" class="painel secao-estoque" aria-labelledby="t-estoque">
+      <div class="secao-estoque__cabeca">
+        <div>
+          <h2 id="t-estoque">Estoque de produtos químicos</h2>
+          <p class="ajuda">Dias restantes = saldo ÷ consumo médio dos últimos 30 dias. Alerta abaixo de 7 dias, atenção abaixo de 15.</p>
+        </div>
+        <button type="button" class="btn btn--sinal" id="btn-entrada">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          Registrar entrada
+        </button>
+      </div>
+      <div class="rolagem-tabela">
+        <table class="tabela tabela--estoque" id="tabela-estoque">
+          <caption class="sr-only">Saldo dos produtos químicos da regional</caption>
+          <thead>
+            <tr><th scope="col">Produto</th><th scope="col" class="num">Saldo</th><th scope="col" class="num">Consumo/dia</th><th scope="col">Dias restantes</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <p class="retorno" id="retorno-estoque" role="status"></p>
+    </section>
+
+    <section id="boletim-secao" class="painel painel--plano secao-boletim" aria-labelledby="t-boletim">
+      <div class="secao-boletim__cabeca">
+        <div>
+          <h2 id="t-boletim">Boletim do dia</h2>
+          <p class="ajuda">Junta as leituras, as ocorrências e o estoque num resumo pronto para imprimir ou salvar em PDF.</p>
+        </div>
+        <button type="button" class="btn btn--sinal" id="btn-boletim">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V3h10v6M7 17H4v-7h16v7h-3M7 14h10v7H7z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Gerar boletim do dia
+        </button>
+      </div>
+      <article class="boletim" id="boletim" hidden aria-label="Boletim gerado"></article>
+    </section>
+  </main>
+
+  <footer class="contido rodape">
+    <p>Faixas de referência usadas na demonstração: cloro residual livre de 0,2 a 2,0 mg/L, turbidez até 5,0 NTU e pH de 6,0 a 9,5.</p>
+  </footer>
+
+  <dialog id="dlg-entrada" class="dialogo" aria-labelledby="t-dlg">
+    <form id="form-entrada" method="dialog" novalidate>
+      <h2 id="t-dlg">Registrar entrada</h2>
+      <div class="campo">
+        <label for="e-produto">Produto</label>
+        <select id="e-produto" name="produto"></select>
+      </div>
+      <div class="campo">
+        <label for="e-qtd">Quantidade recebida <span class="unid" id="e-unid">kg</span></label>
+        <input id="e-qtd" name="qtd" type="text" inputmode="decimal" autocomplete="off" required aria-describedby="m-qtd">
+        <p class="campo__msg" id="m-qtd" aria-live="polite"></p>
+      </div>
+      <div class="campo">
+        <label for="e-nota">Nota fiscal <span class="unid">opcional</span></label>
+        <input id="e-nota" name="nota" type="text" autocomplete="off">
+      </div>
+      <div class="dialogo__acoes">
+        <button type="button" class="btn" id="btn-cancelar">Cancelar</button>
+        <button type="submit" class="btn btn--sinal" value="ok">Registrar entrada</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

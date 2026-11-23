@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Painel da associação (demonstração)</title>
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Demonstração do painel de gestão de uma associação de classe: associados, mensalidades e envio de mensagens com aprovação. Dados fictícios.">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="app.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="pular" href="#conteudo">Ir para o conteúdo</a>
+
+  <div class="faixa-demo" role="note">
+    <span>Demonstração com dados fictícios. Nada é gravado.</span>
+    <a href="../../projeto.html?id=associacao">Voltar ao portfólio</a>
+  </div>
+
+  <div class="app">
+    <header class="barra">
+      <div class="marca">
+        <span class="marca__selo" aria-hidden="true">AD</span>
+        <span class="marca__nome">Associação Demonstração</span>
+      </div>
+      <button class="btn barra__menu" type="button" aria-expanded="false" aria-controls="menu" id="botao-menu">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        <span>Menu</span>
+      </button>
+    </header>
+
+    <nav class="menu" id="menu" aria-label="Seções do painel">
+      <div class="marca menu__marca">
+        <span class="marca__selo" aria-hidden="true">AD</span>
+        <span class="marca__nome">Associação Demonstração</span>
+      </div>
+      <ul class="menu__lista">
+        <li><a href="#inicio" data-ir="inicio">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 11l8-6 8 6v8a1 1 0 0 1-1 1h-4v-6H9v6H5a1 1 0 0 1-1-1z"/></svg>
+          Início</a></li>
+        <li><a href="#associados" data-ir="associados">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="9" cy="8" r="3.2"/><path d="M3.5 19c.6-3.2 2.8-5 5.5-5s4.9 1.8 5.5 5"/><path d="M15.5 5.2a3 3 0 0 1 0 5.6M17.5 14.3c1.6.7 2.6 2.3 3 4.7"/></svg>
+          Associados</a></li>
+        <li><a href="#mensalidades" data-ir="mensalidades">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 9.5h17M7.5 15h4"/></svg>
+          Mensalidades <span class="menu__contador" id="menu-atraso" aria-label="associados em atraso"></span></a></li>
+        <li><a href="#mensagens" data-ir="mensagens">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 5.5h16v10H9l-5 4z"/></svg>
+          Mensagens</a></li>
+      </ul>
+      <div class="menu__rodape">
+        <span class="menu__usuario">Secretaria</span>
+        <span class="menu__perfil">Perfil: secretário</span>
+      </div>
+    </nav>
+
+    <main class="principal" id="conteudo" tabindex="-1">
+      <header class="cabeca">
+        <div>
+          <p class="cabeca__data" id="data-hoje">Segunda-feira, 23 de novembro de 2026</p>
+          <h1 class="cabeca__titulo" id="titulo-secao" tabindex="-1">Início</h1>
+        </div>
+        <button class="btn btn--icone" type="button" id="botao-tema" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+          <span>Tema escuro</span>
+        </button>
+      </header>
+
+      <!-- ================= INÍCIO ================= -->
+      <section class="secao-app" data-secao="inicio" aria-labelledby="titulo-secao">
+        <div class="inicio-grade">
+          <article class="painel recebido">
+            <h2 class="painel__cabeca">Recebido em novembro</h2>
+            <p class="recebido__valor"><b id="ind-recebido">R$ 0,00</b> <span>de <span id="ind-previsto">R$ 0,00</span> previstos</span></p>
+            <div class="medidor" aria-hidden="true"><span id="ind-barra"></span></div>
+            <p class="recebido__nota" id="ind-nota"></p>
+            <a class="btn" href="#mensalidades">Ver mensalidades</a>
+          </article>
+
+          <div class="painel painel--plano contagens">
+            <div class="numero"><b id="ind-ativos">0</b><span>associados ativos</span></div>
+            <div class="numero numero--ok"><b id="ind-emdia">0</b><span class="estado estado--ok">em dia</span></div>
+            <div class="numero numero--alerta"><b id="ind-atraso">0</b><span class="estado estado--alerta">em atraso</span></div>
+          </div>
+
+          <article class="painel tarefas">
+            <h2 class="painel__cabeca">Tarefas da semana <span id="tarefas-resumo"></span></h2>
+            <ul class="tarefas__lista" id="tarefas"></ul>
+          </article>
+
+          <article class="painel painel--plano atividade">
+            <h2 class="painel__cabeca">Últimos registros</h2>
+            <ol class="atividade__lista" id="atividade"></ol>
+          </article>
+        </div>
+      </section>
+
+      <!-- ================= ASSOCIADOS ================= -->
+      <section class="secao-app" data-secao="associados" aria-labelledby="titulo-secao" hidden>
+        <div class="ferramentas">
+          <div class="campo campo--busca">
+            <label for="busca">Buscar por nome ou posto</label>
+            <div class="busca">
+              <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="6"/><path d="M20 20l-4.5-4.5"/></svg>
+              <input id="busca" type="search" autocomplete="off" placeholder="Ex.: Lucena ou sargento">
+            </div>
+          </div>
+          <div class="campo">
+            <label for="filtro-situacao">Situação</label>
+            <select id="filtro-situacao">
+              <option value="todos">Todas</option>
+              <option value="emdia">Em dia</option>
+              <option value="atraso">Em atraso</option>
+            </select>
+          </div>
+          <p class="ferramentas__conta" id="conta-associados" aria-live="polite"></p>
+        </div>
+        <div class="painel painel--tabela">
+          <table class="tabela tabela--pilha">
+            <caption class="sr-only">Associados</caption>
+            <thead>
+              <tr><th scope="col">Nome</th><th scope="col">Posto ou graduação</th><th scope="col">Categoria</th><th scope="col">Telefone</th><th scope="col">Situação</th><th scope="col"><span class="sr-only">Ação</span></th></tr>
+            </thead>
+            <tbody id="lista-associados"></tbody>
+          </table>
+          <p class="vazio" id="vazio-associados" hidden>Nenhum associado encontrado. Confira a grafia ou limpe a busca.</p>
+        </div>
+      </section>
+
+      <!-- ================= MENSALIDADES ================= -->
+      <section class="secao-app" data-secao="mensalidades" aria-labelledby="titulo-secao" hidden>
+        <div class="ferramentas">
+          <div class="campo">
+            <label for="mes-ref">Mês de referência</label>
+            <select id="mes-ref"></select>
+          </div>
+          <fieldset class="segmentos">
+            <legend>Mostrar</legend>
+            <label><input type="radio" name="mostrar" value="todos" checked><span>Todos</span></label>
+            <label><input type="radio" name="mostrar" value="pagos"><span>Pagaram</span></label>
+            <label><input type="radio" name="mostrar" value="abertos"><span>Não pagaram</span></label>
+          </fieldset>
+        </div>
+        <div class="resumo-mes" id="resumo-mes"></div>
+        <div class="painel painel--tabela">
+          <table class="tabela tabela--pilha">
+            <caption class="sr-only" id="legenda-mensalidades">Mensalidades</caption>
+            <thead>
+              <tr><th scope="col">Associado</th><th scope="col">Categoria</th><th scope="col" class="num">Valor</th><th scope="col">Situação</th><th scope="col"><span class="sr-only">Ação</span></th></tr>
+            </thead>
+            <tbody id="lista-mensalidades"></tbody>
+          </table>
+          <p class="vazio" id="vazio-mensalidades" hidden></p>
+        </div>
+      </section>
+
+      <!-- ================= MENSAGENS ================= -->
+      <section class="secao-app" data-secao="mensagens" aria-labelledby="titulo-secao" hidden>
+        <div class="msg-grade">
+          <div class="msg-fluxo">
+            <ol class="etapas" aria-label="Etapas do envio">
+              <li data-etapa="compor" aria-current="step">Escrever</li>
+              <li data-etapa="revisar">Revisar a lista</li>
+              <li data-etapa="enviar">Enviar</li>
+            </ol>
+
+            <!-- Etapa 1: compor -->
+            <form class="painel msg-etapa" id="etapa-compor" novalidate>
+              <fieldset class="grupo">
+                <legend>Quem recebe</legend>
+                <div class="opcoes">
+                  <label class="opcao"><input type="radio" name="publico" value="pendentes" checked>
+                    <span><b>Com mensalidade em aberto</b><small id="conta-pendentes"></small></span></label>
+                  <label class="opcao"><input type="radio" name="publico" value="todos">
+                    <span><b>Todos os associados</b><small id="conta-todos"></small></span></label>
+                  <label class="opcao"><input type="radio" name="publico" value="escolher">
+                    <span><b>Escolher pessoas</b><small id="conta-escolhidos">nenhuma marcada</small></span></label>
+                </div>
+                <div class="escolha" id="escolha" hidden>
+                  <label for="busca-escolha" class="sr-only">Filtrar pessoas</label>
+                  <input id="busca-escolha" type="search" placeholder="Filtrar por nome" autocomplete="off">
+                  <ul class="escolha__lista" id="escolha-lista"></ul>
+                </div>
+              </fieldset>
+
+              <div class="grupo">
+                <label for="texto" class="grupo__titulo">Texto da mensagem</label>
+                <div class="variaveis" role="group" aria-label="Inserir campo no texto">
+                  <button type="button" class="variavel" data-var="{nome}">{nome}</button>
+                  <button type="button" class="variavel" data-var="{meses}">{meses}</button>
+                  <button type="button" class="variavel" data-var="{valor}">{valor}</button>
+                </div>
+                <textarea id="texto" rows="6" maxlength="600" aria-describedby="texto-ajuda"></textarea>
+                <p class="ajuda" id="texto-ajuda"><span>{nome} vira o primeiro nome, {meses} os meses em aberto e {valor} o total devido.</span> <span id="texto-conta"></span></p>
+              </div>
+
+              <p class="erro" id="erro-compor" role="alert" hidden></p>
+              <div class="acoes">
+                <button class="btn btn--sinal" type="submit">Montar a lista</button>
+              </div>
+            </form>
+
+            <!-- Etapa 2: revisar -->
+            <div class="painel msg-etapa" id="etapa-revisar" hidden>
+              <div class="revisao__cabeca">
+                <h2 class="revisao__titulo" id="revisao-titulo" tabindex="-1">Revise antes de aprovar</h2>
+                <button class="btn btn--texto" type="button" id="voltar-texto">Voltar ao texto</button>
+              </div>
+              <p class="revisao__conta" id="revisao-conta" aria-live="polite"></p>
+              <ul class="revisao__lista" id="revisao-lista"></ul>
+              <div class="acrescentar">
+                <label for="acrescentar-quem">Acrescentar alguém</label>
+                <div class="acrescentar__linha">
+                  <select id="acrescentar-quem"></select>
+                  <button class="btn" type="button" id="acrescentar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                    Acrescentar</button>
+                </div>
+              </div>
+              <p class="ajuda">No sistema real o robô respeita das 8h às 19h, com 40 a 120 segundos entre uma mensagem e outra. Aqui o intervalo é de 1 a 2 segundos.</p>
+              <div class="acoes acoes--revisao">
+                <button class="btn btn--sinal" type="button" id="aprovar">Aprovar e enviar</button>
+                <button class="btn" type="button" id="abrir-agenda" aria-expanded="false" aria-controls="agenda">
+                  <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg>
+                  Agendar</button>
+              </div>
+              <div class="agenda" id="agenda" hidden>
+                <div class="campo"><label for="agenda-data">Data</label><input type="date" id="agenda-data"></div>
+                <div class="campo"><label for="agenda-hora">Hora</label><input type="time" id="agenda-hora" min="08:00" max="19:00" step="300" value="09:00"></div>
+                <button class="btn btn--sinal" type="button" id="confirmar-agenda">Confirmar agendamento</button>
+                <p class="erro" id="erro-agenda" role="alert" hidden></p>
+              </div>
+            </div>
+
+            <!-- Etapa 3: enviar / relatório -->
+            <div class="painel msg-etapa" id="etapa-enviar" hidden>
+              <div class="revisao__cabeca">
+                <h2 class="revisao__titulo" id="envio-titulo" tabindex="-1">Enviando</h2>
+                <button class="btn" type="button" id="parar">Parar envio</button>
+              </div>
+              <div class="andamento">
+                <p class="andamento__texto" id="andamento-texto" aria-live="polite"></p>
+                <div class="medidor" role="progressbar" id="andamento-barra" aria-valuemin="0" aria-valuenow="0" aria-label="Andamento do envio"><span></span></div>
+              </div>
+              <div class="relatorio" id="relatorio" hidden></div>
+              <ul class="revisao__lista revisao__lista--envio" id="envio-lista"></ul>
+              <div class="acoes" id="acoes-fim" hidden>
+                <button class="btn btn--sinal" type="button" id="nova-mensagem">Escrever nova mensagem</button>
+              </div>
+            </div>
+
+
+          </div>
+
+          <aside class="previa" aria-labelledby="previa-titulo">
+            <div class="previa__topo">
+              <h2 class="previa__titulo" id="previa-titulo">Prévia</h2>
+              <label for="previa-quem" class="sr-only">Ver a prévia de</label>
+              <select id="previa-quem"></select>
+            </div>
+            <div class="conversa">
+              <div class="conversa__contato">
+                <span class="conversa__avatar" id="previa-inicial" aria-hidden="true"></span>
+                <span><b id="previa-nome"></b><small id="previa-fone"></small></span>
+              </div>
+              <div class="conversa__corpo">
+                <p class="conversa__dia">Hoje</p>
+                <div class="balao" id="previa-balao" aria-live="polite">
+                  <p id="previa-texto"></p>
+                  <span class="balao__hora">09:00
+                    <svg viewBox="0 0 18 12" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 6.5l3 3L10 3M7 9.5l1 0L15 3"/></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </aside>
+
+            <section class="painel painel--plano historico" aria-labelledby="historico-titulo">
+            <h2 class="painel__cabeca" id="historico-titulo">Envios desta sessão</h2>
+            <ul class="historico__lista" id="historico"></ul>
+            <p class="vazio vazio--curto" id="historico-vazio">Nada enviado ainda. Os envios aprovados e agendados aparecem aqui.</p>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="ficha" id="ficha" aria-labelledby="ficha-nome">
+    <div class="ficha__topo">
+      <div>
+        <p class="ficha__posto" id="ficha-posto"></p>
+        <h2 class="ficha__nome" id="ficha-nome"></h2>
+      </div>
+      <button class="btn btn--icone-so" type="button" id="ficha-fechar-x" aria-label="Fechar ficha">
+        <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <dl class="ficha__dados" id="ficha-dados"></dl>
+    <h3 class="ficha__sub">Mensalidades</h3>
+    <ul class="ficha__meses" id="ficha-meses"></ul>
+    <div class="acoes ficha__acoes">
+      <button class="btn btn--sinal" type="button" id="ficha-cobrar">Escrever mensagem</button>
+      <button class="btn" type="button" id="ficha-fechar">Fechar</button>
+    </div>
+  </dialog>
+
+  <div class="aviso" id="aviso" role="status" aria-live="polite"></div>
+</body>
+</html>

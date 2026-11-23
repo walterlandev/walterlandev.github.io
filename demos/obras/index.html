@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Medições de obra | Demonstração</title>
+  <link rel="icon" href="../../assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="Demonstração de um sistema de medições por obra, pavimento e apartamento, com dados fictícios.">
+  <link rel="stylesheet" href="../../assets/css/base.css">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="faixa-demo app-sem-impressao" role="note">
+    <span>Demonstração com dados fictícios. Nada é gravado.</span>
+    <a href="../../projeto.html?id=obras">Voltar ao portfólio</a>
+  </div>
+
+  <header class="topo app-sem-impressao">
+    <div class="contido topo__linha">
+      <div class="marca">
+        <svg viewBox="0 0 32 32" aria-hidden="true" class="marca__icone">
+          <path d="M6 28V9l10-5 10 5v19" fill="none" stroke="currentColor" stroke-width="2"/>
+          <path d="M4 28h24M11 13h3M18 13h3M11 18h3M18 18h3M14 28v-5h4v5" fill="none" stroke="currentColor" stroke-width="2"/>
+        </svg>
+        <div>
+          <p class="marca__nome">Medições de obra</p>
+          <p class="marca__empresa">Construtora Demonstração</p>
+        </div>
+      </div>
+      <div class="topo__acoes">
+        <button type="button" class="btn" id="btn-tema" aria-pressed="false">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 7v10a5 5 0 0 0 0-10z" fill="currentColor"/></svg>
+          <span>Tema escuro</span>
+        </button>
+        <button type="button" class="btn btn--sinal" id="btn-relatorio">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6z M14 3v5h5 M9 13h7 M9 17h7" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+          Gerar relatório
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main id="app" class="contido app-sem-impressao">
+    <section class="obra" aria-labelledby="titulo-obra">
+      <fieldset class="seletor-obra">
+        <legend class="sr-only">Escolher obra</legend>
+        <div id="lista-obras" class="seletor-obra__opcoes"></div>
+      </fieldset>
+      <div class="obra__cabeca">
+        <div>
+          <h1 id="titulo-obra" class="obra__titulo"></h1>
+          <p class="obra__meta" id="meta-obra"></p>
+        </div>
+        <dl class="totais" id="totais"></dl>
+      </div>
+    </section>
+
+    <div class="mesa">
+      <section class="painel corte-painel" aria-labelledby="titulo-corte">
+        <div class="corte-painel__cabeca">
+          <h2 id="titulo-corte" class="h-sec">Corte do prédio</h2>
+          <p class="dica">Toque em um apartamento para ver as medições, ou no nível do pavimento para o resumo do andar.</p>
+        </div>
+        <div class="corte" id="corte"></div>
+        <ul class="legenda" aria-label="Legenda do corte">
+          <li><span class="amostra amostra--nada"></span>Não iniciado</li>
+          <li><span class="amostra amostra--andamento"></span>Em andamento</li>
+          <li><span class="amostra amostra--ok"></span>Concluído</li>
+          <li class="legenda__nota">Barras: F furação, P pintura, H hidráulica. O comprimento mostra quanto já foi executado.</li>
+        </ul>
+      </section>
+
+      <section class="painel painel--plano detalhe" id="detalhe" aria-labelledby="titulo-detalhe" tabindex="-1"></section>
+    </div>
+  </main>
+
+  <div class="aviso app-sem-impressao" id="aviso" role="status" aria-live="polite"></div>
+
+  <section id="relatorio" class="relatorio" hidden aria-labelledby="titulo-relatorio"></section>
+
+  <script src="app.js"></script>
+</body>
+</html>
